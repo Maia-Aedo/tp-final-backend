@@ -21,6 +21,8 @@ model Usuario {
   activo      Boolean @default(true)  
 }
 
+// TODO: buscar relacion usuario-productos
+
 model Productos {
   id     Int     @id @default(autoincrement())
   nombre String

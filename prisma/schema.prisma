@@ -17,8 +17,10 @@ model Usuario {
   id          Int     @id @default(autoincrement())
   correo      String  @unique
   contrasenia String?
+  // posteos     Post[]
   rol         String
-  activo      Boolean @default(true)  
+  disponible  Boolean? @default(true) 
+  @@index([disponible]) 
 }
 
 // TODO: buscar relacion usuario-productos

@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import {  Response } from 'express';
+import {  response, Response } from 'express';
 import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('usuarios')
@@ -29,23 +29,33 @@ export class UsuariosController {
     response.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 
+  // aqui falta completar, 
   @Get()
   findAll() {
     return this.usuariosService.findAll();
   }
 
+  // aqui falta completar
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usuariosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return this.usuariosService.update(+id, updateUsuarioDto);
-  }
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
+    @Res() response: Response,
+    ) {
+      const result = await this.usuariosService.update(id, updateUsuarioDto);
+      response.status(HttpStatus.OK).json({ ok: true, result, msg:'Approved'});  }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuariosService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id:number,
+    @Res() response: Response,
+  ) {
+    const result = await this.usuariosService.remove(id);
+    response.status(HttpStatus.OK).json({ ok: true, result, mgs: 'Aproved'});
   }
 }

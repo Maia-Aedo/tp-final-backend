@@ -5,6 +5,7 @@ import { UsuariosController } from './usuarios.controller';
 import { AuthService } from './auth/auth.service';
 import { envs } from 'src/config';
 import { JwtPassportService } from './auth/jwt-passport.service';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   controllers: [UsuariosController],
@@ -14,6 +15,7 @@ import { JwtPassportService } from './auth/jwt-passport.service';
       secret: envs.jwt_seed,
       signOptions: { expiresIn: '24h'}
     }),
+    PrismaModule,
   ],
 })
 export class UsuariosModule {}

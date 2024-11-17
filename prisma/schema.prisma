@@ -17,17 +17,21 @@ model Usuario {
   id          Int     @id @default(autoincrement())
   correo      String  @unique
   contrasenia String?
-  // posteos     Post[]
   rol         String
   disponible  Boolean? @default(true) 
+  // Relación con tabla productos (1 a n)
+  productos     Producto[]
   @@index([disponible]) 
 }
 
 // TODO: buscar relacion usuario-productos
 
-model Productos {
+model Producto {
   id     Int     @id @default(autoincrement())
   nombre String
   precio Float?
   activo Boolean @default(true)
+  usuarioId Int?
+  // Relación a tabla Usuario
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
 }

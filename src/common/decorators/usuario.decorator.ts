@@ -1,6 +1,11 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-// Obtiene info del usuario después de codificar token
+/**
+ * Los decoradores sirven para agregar metadatos a clases, métodos y propiedades
+ * Permiten odificar el comportamiento total de una clase.
+ * 
+ * function createParamDecorator obtiene info del usuario después de codificar token
+ */
 export const Usuario = createParamDecorator(
     // ctx -> app context
     (data: unknown, ctx: ExecutionContext) => {

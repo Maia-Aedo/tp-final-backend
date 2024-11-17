@@ -33,13 +33,13 @@ export class AuthService {
     // --------------------------
     
     // Hash de contraseña
-    hashPassword(contrasenia: string): Promise<string>{
+    hashContrasenia(contrasenia: string): Promise<string>{
         const saltOrRounds = 12;
         return bcrypt.hash(contrasenia, saltOrRounds);
     }
     // Identifica si la contraseña es correcta
-    comparePasswords( contrasenia: string, hashPassword: string): Promise<boolean>{
-        return bcrypt.compare(contrasenia, hashPassword);
+    comparePasswords( contrasenia: string, hashContrasenia: string): Promise<boolean>{
+        return bcrypt.compare(contrasenia, hashContrasenia);
     }
     // --------------------------
 }

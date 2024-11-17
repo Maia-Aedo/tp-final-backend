@@ -6,7 +6,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-@Catch (HttpException)
+// Los filters ayudan a mejorar mmensajes de error al fallar una petición
+
+@Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(exception: any, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
@@ -16,10 +18,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
         // intentamos extraer los detaller especificos del mensaje error
         const exceptionResponse: any = exception.getResponse();
-        const message = 
-        exceptionResponse.message instanceof Array
-        ? exceptionResponse.message
-        : [exception.menssage];
+        const message =
+            exceptionResponse.message instanceof Array
+                ? exceptionResponse.message
+                : [exception.menssage];
 
         // aqui implementamos el mensaje de error personalizado:
         response.status(status).json({

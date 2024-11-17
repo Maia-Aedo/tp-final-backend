@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, ParseIntPipe, Query } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import {  response, Response } from 'express';
 import { Public } from 'src/common/decorators/public.decorator';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -31,14 +32,19 @@ export class UsuariosController {
 
   // aqui falta completar, 
   @Get()
-  findAll() {
-    return this.usuariosService.findAll();
+  async findAll(@Query() paginator: PaginatorDto, @Res() response: Response) {
+    const result = await this.usuariosService.findAll(paginator);
+    response.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved'});
   }
 
   // aqui falta completar
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuariosService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() response: Response,
+  ){
+    const result = await this.usuariosService.findOne(id);
+    response.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved'});
   }
 
   @Patch(':id')

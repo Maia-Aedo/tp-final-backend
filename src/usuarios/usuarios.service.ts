@@ -118,7 +118,7 @@ export class UsuariosService {
       where: { id },
       data: {
         //cambiamos su disponibilidad 
-        disponibilidad: false,
+        disponible: false,
       },
     });
     delete result['contrasenia'];

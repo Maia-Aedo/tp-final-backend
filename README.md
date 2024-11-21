@@ -1,85 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+<p> Trabajo Práctico Evaluativo: Servidor Básico con NestJS
+Objetivo:
+Crear una aplicación de servidor utilizando NestJS que permita gestionar un
+sistema de inventario básico con usuarios y productos.
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descripción
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este README proporciona instrucciones detalladas para la instalación y ejecución de un proyecto NestJS utilizando Prisma como ORM, JOI para la validación de variables de entorno, y JWT para la autenticación de usuarios.
 
-## Description
+## Requisitos previos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu entorno de desarrollo:
 
-## Project setup
+Node.js (recomendado versión 18 o superior)
+npm (viene con Node.js)
+Base de datos (como PostgreSQL, MySQL o SQLite)
+
+## Pasos para la instalación y dependecias
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
-
+## Configurar las variables de entorno
+Crea un archivo .env en la raíz del proyecto y define tus variables de entorno, por ejemplo:
 ```bash
 # development
-$ npm run start
+$ PORT=3000
+DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/mi_base_de_datos"
+JWT_SECRET=mi-secreto-de-jwt
 
-# watch mode
+- PORT: Puerto en el que se ejecutará tu servidor.
+- DATABASE_URL: URL de conexión a tu base de datos.
+- JWT_SECRET: Clave secreta para la firma de tokens JWT.
+```
+
+# Configurar Prisma
+```bash
+# Esto generará los archivos necesarios (schema.prisma, .env, etc.). Luego, configura tu base de datos en el archivo .env y define tu esquema en schema.prisma.
+$ npx prisma init
+```
+
+# Crear las migraciones de la base de datos
+```bash
+## Para crear las tablas en la base de datos, ejecuta el siguiente comando:
+$ npx prisma migrate dev --name init
+# Este comando aplicará las migraciones y generará el cliente Prisma.
+```
+# Configuración de Prisma y módulos
+```bash
+## En tu proyecto, debes crear un módulo de Prisma que exporte los servicios necesarios. Ejecuta los siguientes comandos para generar los archivos:
+$ nest g mo prisma
+$ nest g s prisma
+
+## Luego, en tu archivo prisma.service.ts, conecta la base de datos usando Prisma y crea un servicio para interactuar con ella.
+```
+## Configuración de JOI para validar las variables de entorno
+```bash
+## Crea una carpeta configuration con los archivos index.ts y envs.ts para gestionar la validación de las variables de entorno.
+## Utiliza JOI para validar las variables en el archivo envs.ts:
+$ import * as Joi from 'joi';
+
+export const envValidationSchema = Joi.object({
+  PORT: Joi.number().required(),
+  DATABASE_URL: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+});
+```
+
+## Crear recursos y CRUD
+```bash
+## Puedes generar recursos para realizar el CRUD de tus entidades. Por ejemplo, para crear un recurso de usuarios, usa el siguiente comando:
+$ nest g res usuarios
+## Esto generará un controlador, un servicio y un DTO para manejar la creación, actualización, eliminación y lectura de los usuarios.
+```
+
+## Agregar seguridad y autenticación
+```bash
+## Para añadir seguridad y autenticación a tu proyecto, primero instala las dependencias necesarias:
+$ npm install bcrypt @nestjs/jwt passport passport-local passport-jwt
+## Luego, configura el JWT para generar y verificar tokens en el servicio de autenticación (auth.service.ts):
+
+- Crea las funciones para generar un token JWT.
+- Implementa la validación de tokens JWT usando Passport.
+```
+
+## Seguridad de las rutas
+```bash
+## Para proteger las rutas de tu servidor usando el JWT, crea un guard que verifique si la petición tiene un token válido:
+$ nest g guard usuarios/auth/jwt --flat
+## Este guard verificará que las solicitudes tengan un token válido antes de permitir el acceso a las rutas.
+```
+
+## Iniciar el servidor
+```bash
+## Una vez que todo esté configurado, puedes levantar el servidor con:
+$ npm run start
+```
+
+## Comandos útiles
+```bash
+## Ejecutar el servidor en modo desarrollo:
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
+## Ejecutar migraciones de Prisma:
+$ npx prisma migrate dev
+
+## Generar cliente Prisma:
+$ npx prisma generate
+
+## Generar un nuevo módulo:
+$ nest g mo [nombre-modulo]
+
+
+## Generar un nuevo servicio:
+$ nest g s [nombre-servicio]
+
+
+## Generar un nuevo recurso (controlador + servicio + DTO):
+$ nest g res [nombre-recurso]
+
 ```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

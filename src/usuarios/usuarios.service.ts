@@ -4,6 +4,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthService } from './auth/auth.service';
 import { LoginDto } from './dto/login.dto';
+import { PaginatorDto } from 'src/common/paginator/paginator.dto';
 
 @Injectable()
 export class UsuariosService {

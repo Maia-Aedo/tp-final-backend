@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Par
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import {  response, Response } from 'express';
+import { Response } from 'express';
 import { Public } from 'src/common/decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
+import { PaginatorDto } from 'src/common/paginator/paginator.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -30,14 +31,14 @@ export class UsuariosController {
     response.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 
-  // aqui falta completar, 
+  
   @Get()
   async findAll(@Query() paginator: PaginatorDto, @Res() response: Response) {
     const result = await this.usuariosService.findAll(paginator);
     response.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved'});
   }
 
-  // aqui falta completar
+  
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,

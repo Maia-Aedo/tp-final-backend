@@ -3,6 +3,10 @@ Objetivo:
 Crear una aplicación de servidor utilizando NestJS que permita gestionar un
 sistema de inventario básico con usuarios y productos.
 </p>
+<p> División de tareas:
+Aedo Maia: CRUD productos, Seguridad, Paginador
+Ulloa Melina: CRUD usuarios, MER, Readme  
+</p>
 
 ## Descripción
 
